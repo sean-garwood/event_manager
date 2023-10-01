@@ -37,8 +37,7 @@ contents = CSV.open(
   header_converters: :symbol
 )
 
-most_popular_hour = 0
-
+registration_hours = []
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
