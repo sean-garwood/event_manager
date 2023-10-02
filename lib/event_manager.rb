@@ -4,7 +4,6 @@ require 'csv'
 require 'erb'
 require 'google/apis/civicinfo_v2'
 require_relative '../cleaners'
-require_relative '../target_times'
 
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
@@ -46,6 +45,18 @@ contents.each do |row|
   # form_letter = erb_template.result(binding)
   # save_thank_you_letter(id, form_letter)
   registration_time = clean_regdate(row[:regdate])
-  puts registration_time
-  puts registration_time.hour
+  begin
+    registration_hours << registration_time
+  rescue
+    registration_hours << 99
+  end
+  puts "#{name} #{id} #{registration_time} #{registration_hours}"
 end
+
+tally_reg_hours = registration_hours.reduce(Hash.new(0)) do |best_hour, hour|
+  best_hour[hour] += 1
+  best_hour
+end
+
+puts tally_reg_hours
+puts(tally_reg_hours.max_by { |k, v| v })
