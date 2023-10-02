@@ -44,13 +44,12 @@ contents.each do |row|
   legislators = legislators_by_zipcode(zipcode)
   # form_letter = erb_template.result(binding)
   # save_thank_you_letter(id, form_letter)
-  registration_time = clean_regdate(row[:regdate])
+  registration_time = get_registration_hour(row[:regdate])
   begin
     registration_hours << registration_time
   rescue
     registration_hours << 99
   end
-  puts "#{name} #{id} #{registration_time} #{registration_hours}"
 end
 
 tally_reg_hours = registration_hours.reduce(Hash.new(0)) do |best_hour, hour|
@@ -58,5 +57,6 @@ tally_reg_hours = registration_hours.reduce(Hash.new(0)) do |best_hour, hour|
   best_hour
 end
 
-puts tally_reg_hours
-puts(tally_reg_hours.max_by { |k, v| v })
+best_hour = tally_reg_hours.max_by { |k, v| v }[0]
+
+puts "#{best_hour}:00 is best hour to advertise (unless you're Disco Stu.)"
