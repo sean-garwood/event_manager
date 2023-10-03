@@ -10,11 +10,15 @@ def bad?(number)
 end
 
 def clean_phone_number(phone_number)
-  phone_number.to_s.rjust(10, '0')[-10..-1] unless bad?(phone_number)
+  phone_number.to_s.rjust(10, '0')[-10..] unless bad?(phone_number)
 end
 
 def get_registration_hour(regdate)
   Time.parse(regdate.split(' ')[1]).hour
+end
+
+def get_registration_day(regdate)
+  Date.parse(regdate.split(' ')[0]).day
 end
 
 def clean_zipcode(zipcode)

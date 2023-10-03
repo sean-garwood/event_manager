@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'date'
 require 'csv'
 require 'erb'
 require 'google/apis/civicinfo_v2'
@@ -37,6 +38,7 @@ contents = CSV.open(
 )
 
 registration_hours = []
+registration_days = []
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
@@ -45,6 +47,7 @@ contents.each do |row|
   # form_letter = erb_template.result(binding)
   # save_thank_you_letter(id, form_letter)
   registration_time = get_registration_hour(row[:regdate])
+  registration_day = get_registration_day(row[:regdate])
   begin
     registration_hours << registration_time
   rescue
